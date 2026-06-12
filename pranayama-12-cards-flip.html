@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Пранаяма · 12 карт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,400&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101116;color:#e9e7df;font-family:'Onest',system-ui,sans-serif;padding:32px 18px 70px}
+.head{max-width:1200px;margin:0 auto 22px}
+.head h1{font-family:'Playfair Display',serif;font-weight:500;font-size:23px;margin:0 0 6px}
+.head p{margin:0;font-size:13px;color:#9c9c98;line-height:1.6;max-width:760px}
+.grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:30px;justify-items:center}
+
+.stage{width:360px;height:540px;perspective:1600px}
+.flip{position:relative;width:100%;height:100%;transition:transform .8s cubic-bezier(.4,.05,.2,1);transform-style:preserve-3d;cursor:pointer}
+.flip.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:24px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transition:opacity 0s linear .4s;color:#f2efe5;box-shadow:0 36px 80px -38px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.05)}
+.front{opacity:1}.back{opacity:0;transform:rotateY(180deg)}
+.flip.flipped .front{opacity:0}.flip.flipped .back{opacity:1}
+@media(prefers-reduced-motion:reduce){.flip,.face{transition:none}}
+
+.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+.fl-frame{position:absolute;inset:14px;border:1px solid rgba(236,231,216,.22);border-radius:14px;pointer-events:none}
+.kicker{position:absolute;top:28px;left:0;right:0;text-align:center;font-size:10px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:rgba(238,233,219,.72)}
+.collector{position:absolute;top:25px;right:28px;display:flex;align-items:center;gap:6px;font-family:'Playfair Display',serif;font-size:13px;color:rgba(238,233,219,.6)}
+.collector svg{width:13px;height:13px}
+.plate{position:absolute;left:0;right:0;bottom:0;padding:0 28px 28px}
+.hr{width:32px;height:1px;background:linear-gradient(90deg,#d9c08a,rgba(217,192,138,0));margin-bottom:13px}
+.f-name{font-family:'Playfair Display',serif;font-weight:500;font-size:31px;line-height:1.02;color:#f5f0e6;margin:0}
+.f-sans{font-size:10px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:rgba(202,206,224,.72);margin-top:6px}
+.poem{font-family:'Playfair Display',serif;font-style:italic;font-size:14px;line-height:1.5;color:rgba(228,228,240,.9);margin:11px 0 0;max-width:270px}
+.meta{margin-top:12px;font-size:10.5px;color:rgba(202,206,224,.72);letter-spacing:.02em}
+
+.back{--accent:#9b8cff;--chip:rgba(238,233,219,.26);--hair:rgba(238,233,219,.15);--dim:#a7adc4}
+.bk-frame{position:absolute;inset:14px;border:1px solid rgba(236,231,216,.20);border-radius:16px;pointer-events:none}
+.inner{position:absolute;inset:14px;padding:18px 20px;display:flex;flex-direction:column;gap:11px}
+
+.qrtop{display:flex;align-items:center;justify-content:center;gap:11px}
+.qrbadge{width:38px;height:38px;border-radius:50%;border:1px solid var(--chip);display:grid;place-items:center;color:var(--accent);box-shadow:0 0 22px -7px var(--accent);flex:none}
+.qrbadge svg{width:19px;height:19px}
+.qrtop .t{font-size:11px;color:#e7e4f3;line-height:1.3}
+.qrtop .t b{font-weight:600}.qrtop .t span{color:var(--dim)}
+
+.eyebrow{font-size:9px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.breath{display:flex;flex-direction:column;gap:7px}
+.bar{display:flex;gap:5px;height:13px}
+.seg{border-radius:7px;opacity:.92}
+.barlab{display:flex;font-size:11px;color:var(--dim)}.barlab>div{text-align:center}
+.tech{display:flex;align-items:center;justify-content:center;gap:7px;font-size:11.5px;color:#dcdbe8;font-style:italic;font-family:'Playfair Display',serif}
+
+.picts{display:flex;justify-content:center;gap:24px}
+.pict{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
+.ic{width:34px;height:34px;border-radius:50%;border:1px solid var(--chip);display:grid;place-items:center;color:#ece9df}
+.ic svg{width:17px;height:17px}
+
+.divdot{display:flex;align-items:center;gap:9px}
+.divdot::before,.divdot::after{content:"";height:1px;background:var(--hair);flex:1}
+.divdot span{width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.7}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;flex:1;align-content:start}
+.col .ch{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.it{display:flex;align-items:center;gap:9px;font-size:12px;color:#eae8df;margin-bottom:9px;line-height:1.15}
+.it .dotic{width:26px;height:26px;border-radius:50%;border:1px solid var(--chip);display:grid;place-items:center;color:var(--accent);flex:none}
+.it .dotic svg{width:14px;height:14px}
+
+.foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:11px;border-top:1px solid var(--hair)}
+.contra{font-size:10px;color:var(--dim);line-height:1.45;display:flex;gap:7px;align-items:flex-start}
+.contra .cic{color:#e0a24e;flex:none;margin-top:1px}.contra .cic svg{width:14px;height:14px}
+.qrbox{width:50px;height:50px;border-radius:13px;background:#f2efe5;display:grid;place-items:center;flex:none}
+
+@media print{body{background:#fff;padding:0}.head{display:none}.grid{gap:8mm}.face{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>Пранаяма · 12 карт</h1>
+  <p>Единый стандарт: арт-лицо по типу практики, оборот по клику. Сверху — метка «полная техника по QR», снизу — ключевые ограничения и QR. Все иконки круглые, инлайн. Палитра приближённая, под точные цвета с сайта.</p>
+</div>
+<div class="grid" id="grid"></div>
+
+<script>
+const ICONS={
+ moon:'<path d="M20 13.5A7.5 7.5 0 1 1 11 5a6 6 0 0 0 9 8.5Z"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.7 4.7l1.4 1.4M17.9 17.9l1.4 1.4M2.5 12h2M19.5 12h2M4.7 19.3l1.4-1.4M17.9 6.1l1.4-1.4"/>',
+ sit:'<circle cx="12" cy="6.5" r="2.4"/><path d="M5.5 18c1.3-3 3.8-4.6 6.5-4.6S17.2 15 18.5 18M8.5 12 12 14.5 15.5 12"/>',
+ hand:'<path d="M8.6 13.4 8 12a1.2 1.2 0 0 1 2-1.1l.7.9V6a1.2 1.2 0 0 1 2.4 0v3.4m0-1.1a1.2 1.2 0 0 1 2.4 0V13c0 3-2 5-5 5-2.1 0-3.4-1-4.5-2.6Z"/>',
+ lock:'<rect x="6.5" y="11" width="11" height="8" rx="2.4"/><path d="M9 11V8.6a3 3 0 0 1 6 0V11"/>',
+ ripple:'<circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="12" r="5.3"/><circle cx="12" cy="12" r="8.4"/>',
+ mind:'<path d="M16 17c0-1.8-1-2.8-1-4.6 0-2.7-2.2-4.6-4.8-4.3C8 8.4 6.5 10.3 6.5 12.7c0 1.4.5 2.7 1.5 3.6"/><circle cx="9.6" cy="12.4" r=".9"/>',
+ eye:'<path d="M3 12s3.4-6 9-6 9 6 9 6-3.4 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/>',
+ bulb:'<path d="M9 16.5a5 5 0 1 1 6 0c-.6.5-1 1-1 2h-4c0-1-.4-1.5-1-2Z"/><path d="M10 21h4"/>',
+ sleep:'<path d="M5.5 9h4l-4 5h4"/><path d="M14 6.5h3.6l-3.6 4.3h3.6"/>',
+ snow:'<path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5 4.2 16.5"/><path d="M12 6.5 9.7 5m2.3 1.5L14.3 5M12 17.5 9.7 19m2.3-1.5L14.3 19"/>',
+ leaf:'<path d="M6 18C6 10.5 11.5 6 18 6c0 7.5-5.5 12-12 12Z"/><path d="M10.5 13.5 18 6"/>',
+ heart:'<path d="M12 19S4 14.5 4 9.8C4 7.4 5.8 6 7.7 6 9.4 6 12 8 12 8s2.6-2 4.3-2C18.2 6 20 7.4 20 9.8 20 14.5 12 19 12 19Z"/>',
+ alert:'<circle cx="12" cy="12" r="8.6"/><path d="M12 7.8v4.6M12 16h.01"/>',
+ flame:'<path d="M12 3c1 3 4 4 4 8a4 4 0 0 1-8 0c0-1.6.6-2.6 1.6-3.6C10.2 9 11 7 12 3Z"/>',
+ bolt:'<path d="M13 3 5.5 13H10l-1 8 8.5-11H13l1-7Z"/>',
+ wind:'<path d="M3 9h9.5A2.5 2.5 0 1 0 10 6.5M3 13h11.5A2.5 2.5 0 1 1 12 15.5M3 17h6.5A2 2 0 1 1 7.7 19.8"/>',
+ target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".9"/>',
+ music:'<path d="M9 17V6l9-2v11"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="15.5" cy="15.5" r="2.5"/>',
+ balance:'<path d="M12 4v16M6 20h12M12 6 6.5 12a3 3 0 0 0 5.5 0M12 6l5.5 6a3 3 0 0 1-5.5 0"/>',
+ anchor:'<circle cx="12" cy="5.5" r="2"/><path d="M12 7.5v12M5 13a7 7 0 0 0 14 0M5 13H3m16 0h2"/>',
+ mountain:'<path d="M3 19 10 7l3.5 5.5L16 9l5 10Z"/>',
+ droplet:'<path d="M12 4c3 4 5 6.5 5 9a5 5 0 0 1-10 0c0-2.5 2-5 5-9Z"/>',
+ sparkles:'<path d="M12 4l1.5 4.3L18 10l-4.5 1.7L12 16l-1.5-4.3L6 10l4.5-1.7Z"/>',
+ lungs:'<path d="M12 4v8M9 9.5C9 7.5 8 6.5 6.6 6.5 5 6.5 4 8 4 11s1 7 3 7 2-2 2-4V9.5ZM15 9.5C15 7.5 16 6.5 17.4 6.5 19 6.5 20 8 20 11s-1 7-3 7-2-2-2-4V9.5Z"/>',
+ smile:'<circle cx="12" cy="12" r="8.5"/><path d="M8.5 14a4 4 0 0 0 7 0"/><circle cx="9" cy="10" r=".8"/><circle cx="15" cy="10" r=".8"/>',
+ adjust:'<path d="M5 8h8M17 8h2M5 16h2M11 16h8"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/>',
+ scan:'<path d="M4 8V6.5A2.5 2.5 0 0 1 6.5 4H8M16 4h1.5A2.5 2.5 0 0 1 20 6.5V8M20 16v1.5a2.5 2.5 0 0 1-2.5 2.5H16M8 20H6.5A2.5 2.5 0 0 1 4 17.5V16"/><rect x="9" y="9" width="6" height="6" rx="1.6"/>'
+};
+function svg(p,w){w=w||'1.7';return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[p]||'')+'</svg>';}
+function qrMini(){return '<svg width="38" height="38" viewBox="0 0 40 40"><rect x="3" y="3" width="11" height="11" rx="3" fill="none" stroke="#15203f" stroke-width="2.4"/><rect x="26" y="3" width="11" height="11" rx="3" fill="none" stroke="#15203f" stroke-width="2.4"/><rect x="3" y="26" width="11" height="11" rx="3" fill="none" stroke="#15203f" stroke-width="2.4"/><circle cx="8.5" cy="8.5" r="2.2" fill="#15203f"/><circle cx="31.5" cy="8.5" r="2.2" fill="#15203f"/><circle cx="8.5" cy="31.5" r="2.2" fill="#15203f"/><circle cx="21" cy="21" r="2" fill="#15203f"/><circle cx="28" cy="22" r="2" fill="#15203f"/><circle cx="34" cy="28" r="2" fill="#15203f"/><circle cx="22" cy="29" r="2" fill="#15203f"/><circle cx="30" cy="34" r="2" fill="#15203f"/></svg>';}
+
+const FAM={
+ calm:   {sky1:'#1a2645',sky2:'#0b1226',accent:'#9b8cff',fig:'#070a18',stream:'#eaf0ff',lum:'moon',d1:'#fbfaf3',d2:'#9aa6c6',glow:'#aab6e0'},
+ cool:   {sky1:'#123442',sky2:'#06141d',accent:'#57b6cf',fig:'#04131b',stream:'#e6f7ff',lum:'moon',d1:'#eafaff',d2:'#8fb8c6',glow:'#6fd0e6'},
+ active: {sky1:'#341d14',sky2:'#160b06',accent:'#e69a4c',fig:'#160b06',stream:'#ffe9cf',lum:'sun', d1:'#ffe9b8',d2:'#e08a3a',glow:'#ffba6a'},
+ balance:{sky1:'#123b36',sky2:'#07201d',accent:'#4dc0ae',fig:'#06201c',stream:'#e3fbf4',lum:'orb', d1:'#dff7f0',d2:'#5fb9aa',glow:'#56cdb8'},
+ base:   {sky1:'#222838',sky2:'#10131c',accent:'#c9b079',fig:'#0a0d16',stream:'#eef0fb',lum:'orb', d1:'#efe7d4',d2:'#b6a274',glow:'#d8c79a'}
+};
+const CHC=['#c4b4ff','#9b8cff','#62b0e6','#74cf90','#ecd25c','#e6aa54','#df7060'];
+const FANCH=[[98,254],[120,288],[110,348],[104,382],[101,414],[100,448],[100,482]];
+const IN='#6db4c9',HO='#8390db',EX='#d9a05e';
+
+const CARDS=[
+ {n:'01',name:'Вибхагия',sans:'Vibhāgīya',fam:'base',vals:['спокойствие','полнота'],poem:'дыши полной грудью — живи полной жизнью',
+  meta:'Манипура · оба канала',when:'в любое время',dur:'3–10',ch:[4,3,2],
+  br:{ph:[['вдох',1,IN],['выдох',1,EX]],r:'1 : 1'},tech:'вдох: живот → грудь → ключицы',
+  pic:[['sit','сидя'],['hand','чин-мудра']],
+  mind:[['ripple','спокойствие'],['bulb','ясность'],['target','собранность'],['mind','снятие стресса']],
+  body:[['lungs','полнота дыхания'],['leaf','расслабление'],['sparkles','прилив сил'],['wind','ровное дыхание']],
+  rx:'на полный желудок — осторожно'},
+ {n:'02',name:'Удджайи',sans:'Ujjāyī',fam:'base',vals:['покой','фокус'],poem:'океаническое дыхание, что укрывает ум покоем',
+  meta:'Вишуддха',when:'в любое время',dur:'3–10',ch:[2],
+  br:{ph:[['вдох',1,IN],['выдох',1,EX]],r:'1 : 1'},tech:'сужение гортани, звук океана; через нос',
+  pic:[['sit','сидя'],['hand','чин-мудра'],['lock','джаландхара']],
+  mind:[['ripple','покой'],['target','концентрация'],['bulb','ясность'],['mind','меньше тревоги']],
+  body:[['flame','мягкое тепло'],['wind','ровное дыхание'],['music','звучный голос'],['leaf','расслабление']],
+  rx:'при сильном кашле — осторожно'},
+ {n:'03',name:'Бхастрика',sans:'Bhastrikā',fam:'active',vals:['энергия','тепло'],poem:'раздувает внутренний огонь, сжигая вялость',
+  meta:'Манипура · оба',when:'утро',dur:'2–5',ch:[4,5,6],
+  br:{rapid:true,r:'быстрый ритм'},tech:'активные вдох + выдох животом',
+  pic:[['sit','сидя'],['hand','чин-мудра']],
+  mind:[['bulb','ясный ум'],['mountain','решительность'],['sun','бодрость'],['target','фокус']],
+  body:[['bolt','прилив энергии'],['flame','тепло'],['wind','очищение'],['sparkles','уходит вялость']],
+  rx:'гипертония, эпилепсия, беременность — нельзя'},
+ {n:'04',name:'Капалабхати',sans:'Kapālabhāti',fam:'active',vals:['ясность','бодрость'],poem:'очищает путь для праны, принося сияние',
+  meta:'Аджна · Манипура',when:'утро',dur:'2–5',ch:[1,4],
+  br:{rapid:true,r:'быстрый ритм'},tech:'резкий выдох животом, вдох сам',
+  pic:[['sit','сидя'],['hand','чин-мудра']],
+  mind:[['bulb','ясность'],['sun','бодрость'],['target','фокус'],['smile','подъём настроения']],
+  body:[['bolt','прилив энергии'],['leaf','лёгкость'],['wind','очищение дыхания'],['sparkles','тонус']],
+  rx:'гипертония, эпилепсия, беременность — нельзя'},
+ {n:'05',name:'Сурья Бхедана',sans:'Sūrya Bhedana',fam:'active',vals:['энергия','решимость'],poem:'пробуждает внутреннее солнце, рассеивая холод',
+  meta:'Манипура · Пингала',when:'утро',dur:'3–10',ch:[4],
+  br:{ph:[['вдох',1,IN],['выдох',1,EX]],r:'1 : 1'},tech:'вдох — правая ноздря · выдох — левая',
+  pic:[['sit','сидя'],['hand','насагра'],['lock','джаландхара']],
+  mind:[['mountain','уверенность'],['target','концентрация'],['bolt','решимость'],['bulb','ясность']],
+  body:[['bolt','энергия'],['flame','внутренний огонь'],['sun','бодрость'],['sparkles','тонус']],
+  rx:'гипертония, тревожность — осторожно'},
+ {n:'06',name:'Нади Шодхана',sans:'Nāḍī Śodhana',fam:'balance',vals:['равновесие','покой'],poem:'очищает пути жизни, принося мир уму и сердцу',
+  meta:'Аджна · оба канала',when:'в любое время',dur:'5–20',ch:[1],
+  br:{ph:[['вдох',1,IN],['выдох',1,EX]],r:'1 : 1'},tech:'попеременно, сменой ноздрей',
+  pic:[['sit','сидя'],['hand','насагра'],['lock','джаландхара']],
+  mind:[['balance','равновесие'],['ripple','спокойствие'],['bulb','ясность'],['mind','меньше тревоги']],
+  body:[['wind','ровное дыхание'],['sleep','крепкий сон'],['leaf','расслабление'],['sparkles','восстановление']],
+  rx:'острый насморк — осторожно'},
+ {n:'07',name:'Сама Вритти',sans:'Sama Vṛtti',fam:'balance',vals:['баланс','ясность'],poem:'в равновесии дыхания рождается равновесие жизни',
+  meta:'Анахата',when:'в любое время',dur:'5–10',ch:[3],
+  br:{ph:[['вдох',1,IN],['выдох',1,EX]],r:'1 : 1'},tech:'равные вдох и выдох',
+  pic:[['sit','сидя'],['hand','чин-мудра']],
+  mind:[['balance','баланс'],['target','концентрация'],['bulb','ясность'],['mind','меньше тревоги']],
+  body:[['wind','ровное дыхание'],['leaf','расслабление'],['heart','ровный пульс'],['anchor','устойчивость']],
+  rx:'мягкая практика · общая осторожность'},
+ {n:'08',name:'Вишама Вритти',sans:'Viṣama Vṛtti',fam:'balance',vals:['контроль','баланс'],poem:'мастерство в пропорциях открывает власть над энергией',
+  meta:'Аджна · Манипура',when:'в любое время',dur:'5–10',ch:[1,4],
+  br:{ph:[['вдох',1,IN],['задержка',2,HO],['выдох',2,EX]],r:'1 : 2 : 2'},tech:'неравные фазы по пропорции',
+  pic:[['sit','сидя'],['hand','чин-мудра'],['lock','джаландхара']],
+  mind:[['adjust','контроль'],['balance','баланс'],['target','фокус'],['bulb','ясность']],
+  body:[['lungs','сила дыхания'],['bolt','бодрость'],['leaf','расслабление'],['sparkles','тонус']],
+  rx:'гипертония — осторожно с задержками'},
+ {n:'09',name:'Брамари',sans:'Bhrāmarī',fam:'calm',vals:['умиротворение','сон'],poem:'целительная вибрация звука растворяет напряжение',
+  meta:'Аджна · Вишуддха',when:'в любое время',dur:'3–7',ch:[1,2],
+  br:{ph:[['вдох',1,IN],['выдох',2,EX]],r:'1 : 2'},tech:'выдох с жужжанием «м-м-м»',
+  pic:[['sit','сидя'],['hand','шанмукхи'],['lock','джаландхара']],
+  mind:[['ripple','умиротворение'],['mind','меньше гнева'],['target','концентрация'],['eye','интуиция']],
+  body:[['sleep','крепкий сон'],['music','вибрация-расслабление'],['heart','ровное давление'],['leaf','снятие напряжения']],
+  rx:'при инфекциях уха — осторожно'},
+ {n:'10',name:'Ситали',sans:'Śītalī',fam:'cool',vals:['прохлада','свежесть'],poem:'прохлада горного ручья для тела и ума',
+  meta:'Свадхиштхана · Вишуддха',when:'в жару',dur:'3–10',ch:[2,5],
+  br:{ph:[['вдох',1,IN],['выдох',1,EX]],r:'1 : 1'},tech:'вдох — через язык-трубочку · выдох — нос',
+  pic:[['sit','сидя'],['hand','язык']],
+  mind:[['ripple','спокойствие'],['bulb','ясность'],['mind','меньше раздражения'],['smile','удовлетворение']],
+  body:[['snow','охлаждение'],['sparkles','свежесть'],['droplet','утоляет жажду'],['leaf','расслабление']],
+  rx:'низкое давление, простуда — осторожно'},
+ {n:'11',name:'Ситкари',sans:'Sītkārī',fam:'cool',vals:['прохлада','покой'],poem:'внутренний кондиционер — лёгкость телу, ясность уму',
+  meta:'Свадхиштхана · Вишуддха',when:'в любое время',dur:'3–7',ch:[2,5],
+  br:{ph:[['вдох',1,IN],['выдох',1,EX]],r:'1 : 1'},tech:'вдох — сквозь зубы · выдох — нос',
+  pic:[['sit','сидя'],['hand','зубы']],
+  mind:[['ripple','спокойствие'],['bulb','ясность'],['mind','снятие напряжения'],['smile','удовлетворение']],
+  body:[['snow','охлаждение'],['sparkles','свежесть'],['droplet','утоляет жажду'],['leaf','расслабление']],
+  rx:'низкое давление, чувствительные зубы — осторожно'},
+ {n:'12',name:'Чандра Бхедана',sans:'Chandra Bhedana',fam:'calm',vals:['расслабление','спокойный сон'],poem:'пробуждает внутреннюю Луну, погружая в покой и тишину',
+  meta:'Аджна · Ида',when:'вечер',dur:'3–10',ch:[1,5],
+  br:{ph:[['вдох',1,IN],['выдох',2,EX]],r:'1 : 2'},tech:'вдох — левая ноздря · выдох — правая',
+  pic:[['sit','сидя'],['hand','насагра'],['lock','джаландхара']],
+  mind:[['ripple','спокойствие'],['mind','тихий ум'],['eye','интуиция'],['bulb','ясность']],
+  body:[['sleep','спокойный сон'],['snow','прохлада'],['leaf','расслабление'],['heart','ровное давление']],
+  rx:'гипотония, апатия — осторожно'}
+];
+
+function luminary(f,id){
+  const cx=266,cy=132;
+  let extra='';
+  if(f.lum==='sun'){let ray='';for(let i=0;i<12;i++){const a=i*30*Math.PI/180;ray+=`<line x1="${cx+Math.cos(a)*60}" y1="${cy+Math.sin(a)*60}" x2="${cx+Math.cos(a)*72}" y2="${cy+Math.sin(a)*72}" stroke="${f.glow}" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>`;}extra=ray;}
+  else if(f.lum==='moon'){extra=`<g fill="${f.d2}" opacity=".35"><circle cx="250" cy="116" r="7"/><circle cx="282" cy="146" r="9"/><circle cx="272" cy="110" r="4"/></g>`;}
+  return `<circle cx="${cx}" cy="${cy}" r="96" fill="url(#halo-${id})" filter="url(#soft-${id})"/>${extra}<circle cx="${cx}" cy="${cy}" r="52" fill="url(#disc-${id})"/><circle cx="${cx}" cy="${cy}" r="52" fill="none" stroke="#fffdf6" stroke-opacity=".22"/>`;
+}
+function chakras(c){
+  let dots='',line='';const pts=c.ch.map(i=>FANCH[i]);
+  if(pts.length>1){line=`<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#9fb0d8" stroke-opacity=".3" stroke-width="1"/>`;}
+  c.ch.forEach(i=>{const[x,y]=FANCH[i],col=CHC[i];dots+=`<circle cx="${x}" cy="${y}" r="9" fill="${col}" opacity=".14"/><circle cx="${x}" cy="${y}" r="3.6" fill="${col}"/><circle cx="${x}" cy="${y}" r="1.3" fill="#fff"/>`;});
+  return line+dots;
+}
+function buildFront(c){
+  const f=FAM[c.fam],id=c.n;
+  const scene=`<svg class="scene" viewBox="0 0 360 540" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${f.sky1}"/><stop offset="1" stop-color="${f.sky2}"/></linearGradient>
+      <radialGradient id="halo-${id}" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="${f.glow}" stop-opacity=".5"/><stop offset="1" stop-color="${f.glow}" stop-opacity="0"/></radialGradient>
+      <radialGradient id="disc-${id}" cx="40%" cy="38%" r="70%"><stop offset="0" stop-color="${f.d1}"/><stop offset=".6" stop-color="${f.d1}"/><stop offset="1" stop-color="${f.d2}"/></radialGradient>
+      <linearGradient id="br-${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${f.stream}" stop-opacity=".05"/><stop offset=".5" stop-color="${f.stream}" stop-opacity=".8"/><stop offset="1" stop-color="${f.stream}" stop-opacity=".12"/></linearGradient>
+      <linearGradient id="scrim-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${f.sky2}" stop-opacity="0"/><stop offset="1" stop-color="${f.sky2}" stop-opacity=".94"/></linearGradient>
+      <filter id="soft-${id}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter>
+    </defs>
+    <rect width="360" height="540" fill="url(#sky-${id})"/>
+    <g fill="#eef2ff" id="st-${id}"></g>
+    ${luminary(f,id)}
+    <g fill="none" stroke="url(#br-${id})" stroke-linecap="round">
+      <path d="M150,322 C190,306 224,262 250,186" stroke-width="2"/>
+      <path d="M152,330 C196,320 228,284 252,206" stroke-width="1.3" opacity=".8"/>
+      <path d="M150,338 C192,338 226,308 248,228" stroke-width="1" opacity=".55"/></g>
+    <ellipse cx="92" cy="270" rx="16" ry="16" fill="${f.fig}"/>
+    <path d="M92,250 C114,248 130,266 130,290 C130,302 138,304 138,311 C138,317 130,318 127,322 C123,336 113,344 100,346 C112,352 116,360 116,366 C140,372 156,400 158,440 C158,470 150,520 150,560 L40,560 C40,470 50,398 76,366 C86,356 92,350 96,346 C82,342 74,318 76,292 C78,268 80,252 92,250 Z" fill="${f.fig}"/>
+    ${chakras(c)}
+    <rect x="0" y="300" width="360" height="240" fill="url(#scrim-${id})"/>
+  </svg>`;
+  return `<div class="face front">${scene}
+    <div class="fl-frame"></div>
+    <div class="kicker">${c.vals.join(' · ')}</div>
+    <div class="collector">${svg(f.lum==='sun'?'sun':'moon')} ${c.n} / 12</div>
+    <div class="plate"><div class="hr"></div>
+      <h1 class="f-name">${c.name}</h1>
+      <div class="f-sans">${c.sans}</div>
+      <p class="poem">${c.poem}</p>
+      <div class="meta">${c.meta} · ${c.when} · ${c.dur} мин</div>
+    </div></div>`;
+}
+function buildBack(c){
+  const f=FAM[c.fam];
+  const bar = c.br.rapid
+    ? `<div class="bar">${Array.from({length:9}).map((_,i)=>`<div class="seg" style="flex:1;background:${i%2?HO:IN};opacity:${.55+(i%2?0:.3)}"></div>`).join('')}</div>
+       <div class="barlab"><div style="flex:1">серия резких выдохов</div></div>`
+    : `<div class="bar">${c.br.ph.map(p=>`<div class="seg" style="flex:${p[1]};background:${p[2]}"></div>`).join('')}</div>
+       <div class="barlab">${c.br.ph.map(p=>`<div style="flex:${p[1]}">${p[0]}</div>`).join('')}</div>`;
+  const picts=c.pic.map(p=>`<div class="pict"><div class="ic">${svg(p[0])}</div>${p[1]}</div>`).join('');
+  const mind=c.mind.map(e=>`<div class="it"><span class="dotic">${svg(e[0])}</span>${e[1]}</div>`).join('');
+  const body=c.body.map(e=>`<div class="it"><span class="dotic">${svg(e[0])}</span>${e[1]}</div>`).join('');
+  return `<div class="face back" style="background:radial-gradient(130% 90% at 50% -10%,${f.sky1},${f.sky2} 72%);--accent:${f.accent}">
+    <div class="bk-frame"></div>
+    <div class="inner">
+      <div class="qrtop"><div class="qrbadge">${svg('scan')}</div><div class="t"><b>полная техника</b><br><span>сканируйте QR</span></div></div>
+      <div class="breath"><div class="eyebrow">дыхание · ${c.br.r}</div>${bar}<div class="tech">${c.tech}</div></div>
+      <div class="picts">${picts}</div>
+      <div class="divdot"><span></span></div>
+      <div class="cols">
+        <div class="col"><div class="ch">Для ума и энергии</div>${mind}</div>
+        <div class="col"><div class="ch">Для тела</div>${body}</div>
+      </div>
+      <div class="foot">
+        <div class="contra"><span class="cic">${svg('alert')}</span><span>${c.rx}</span></div>
+        <div class="qrbox">${qrMini()}</div>
+      </div>
+    </div></div>`;
+}
+
+const grid=document.getElementById('grid');
+grid.innerHTML=CARDS.map(c=>`<div class="stage"><div class="flip" data-flip>${buildFront(c)}${buildBack(c)}</div></div>`).join('');
+
+// звёзды для каждого лица
+let seed=7;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+document.querySelectorAll('[id^="st-"]').forEach(g=>{let h='';for(let i=0;i<60;i++){h+=`<circle cx="${(rnd()*360).toFixed(1)}" cy="${(rnd()*410).toFixed(1)}" r="${(rnd()*1.1+.3).toFixed(2)}" opacity="${(rnd()*.6+.2).toFixed(2)}"/>`;}g.innerHTML=h;});
+
+document.querySelectorAll('[data-flip]').forEach(el=>el.addEventListener('click',()=>el.classList.toggle('flipped')));
+</script>
+</body>
+</html>
